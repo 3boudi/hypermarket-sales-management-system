@@ -16,7 +16,7 @@ class AuthController extends Controller
     $validation = Validator::make($request->only(['password', 'cash_register_id', 'name']), [
         'name' => ['required', 'string'],
         'password' => ['required'],
-        'cash_register_id' => ['nullable'],
+        'cash_register_id' => ['required'],
     ]);
 
     if ($validation->fails()) {
@@ -30,30 +30,26 @@ class AuthController extends Controller
     if (!$user || !Hash::check($request->password, $user->password)) {
         return response()->json(['error' => 'Credentials do not match our records'],Response::HTTP_UNAUTHORIZED);
     }
-
-    if($user->role() == 'cashier'){
-        $cash_register = cashRegister::find($request->cash_register_id);
-        if (!$cash_register) {
-            return response()->json(['error' => 'Cash register not found']);
-        }
-        
-       
-        $existingShift = $cash_register->users()->whereNull('end_at')->first();
-        if ($existingShift) {
-            return response()->json(['error' => 'This cash register is already in use']);
-        }
     
-        $user->cashRegister()->attach($request->input('cash_register_id'), ['start_at' => now()]);
-        
-        
+    $cash_register = cashRegister::find($request->cash_register_id);
+    if (!$cash_register) {
+        return response()->json(['error' => 'Cash register not found']);
     }
     
+   
+    $existingShift = $cash_register->users()->whereNull('end_at')->first();
+    if ($existingShift) {
+        return response()->json(['error' => 'This cash register is already in use']);
+    }
+
     $token = $user->createToken($user->id)->plainTextToken;
+
+    
+    $user->cashRegister()->attach($request->input('cash_register_id'), ['start_at' => now()]);
 
     return response()->json([
         'message' => 'User logged in!',
         'token' => $token,
-        'role'=>$user->role(),
     ]);
 }
 
