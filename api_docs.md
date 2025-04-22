@@ -17,7 +17,7 @@ This endpoint is for login
 |-----------|------|----------|-------------|
 | name | string  | yes | the cashier's name |
 | password | string | yes | the cashier's password |
-| cash_register_id | integer | yes | the cash register id that the cashier is using , should be storing in localstorage |
+| cash_register_id | integer | yes in the cash register page login and not for managers| the cash register id that the cashier is using , should be storing in localstorage |
 
 #### Headers
 
@@ -32,7 +32,8 @@ This endpoint is for login
 ```json
 {
     "message": "User logged in!",
-    "token": "2|grqtMWlDzkxKrW0FQ2sQAjOifUjstx8GriPIwWZ6efdfbf9b"
+    "token": "2|grqtMWlDzkxKrW0FQ2sQAjOifUjstx8GriPIwWZ6efdfbf9b",
+    "role":"manager"
 }
 ```
 
@@ -42,6 +43,7 @@ This endpoint is for login
 |-------|------|-------------|
 | message | string | simple message |
 | token | string | used for other routes |
+|role|string|indentifie the role|
 
 
 #### Error Responses

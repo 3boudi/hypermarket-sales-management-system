@@ -2,13 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
-use App\Models\cashRegister;
-use Illuminate\Support\Facades\Validator;
-
-<?php
-
-namespace App\Http\Controllers;
 
 use App\Models\CashRegister;
 use App\Models\User;
